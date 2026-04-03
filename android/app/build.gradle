@@ -1,0 +1,69 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'dev.flutter.flutter-gradle-plugin'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace "com.ashirwaddigital.rrbprep"
+    compileSdk 36
+
+    ndkVersion "27.0.12077973"
+
+    defaultConfig {
+        applicationId "com.ashirwaddigital.rrbprep"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 35
+
+        versionCode flutter.versionCode
+        versionName flutter.versionName
+
+        multiDexEnabled true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    packaging {
+        jniLibs {
+            // This is the MODERN way to force 16 KB alignment
+            useLegacyPackaging = false
+        }
+    }
+
+    signingConfigs {
+        release {
+            keyAlias 'upload'
+            keyPassword 'ashwinsaurav@10' // Replace with your password
+            storeFile file('upload-keystore.jks')
+            storePassword 'ashwinsaurav@10' // Replace with your password
+        }
+    }
+
+    buildTypes {
+        debug {
+            // This is the magic line!
+            // It changes "com.ashirwaddigital.rrbprep" -> "com.ashirwaddigital.rrbprep.debug"
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true  // Good for shrinking app size
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+}
+
+dependencies {
+    implementation "androidx.multidex:multidex:2.0.1"
+}
